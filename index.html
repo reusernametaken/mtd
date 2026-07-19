@@ -18,11 +18,35 @@
     left peek  = JUST GREENS  (previous in the loop)
     right peek = KNET         (next in the loop)
 
-  Center content: the real Mesh That Divide poster you uploaded
-  in a prior session. This file references it at
-  assets/mesh-the-divide-poster.png -- that image file needs to
-  sit in an assets/ folder alongside this index.html when you
-  deploy, it's not embedded in this HTML.
+  Flag content: top slice of the real Mesh That Divide poster
+  (the title/tagline band), cropped out and sized to fill the
+  header frame. Keeps its own natural off-white/cream background
+  -- no transparency keying this time, unlike greens, since this
+  image is meant to visually BE the surface of the zone it sits
+  in, not float as a ghost layer over something else.
+  Asset: assets/mtd-header.jpg (cropped from the original poster,
+  y:0-320 of 1316 total height).
+
+  Body content: the rest of the poster (mountains, radio-wave
+  arcs, road, ground -- everything below the title band),
+  proportionally resized to fill the lower half of center-frame
+  edge to edge. Asset: assets/mtd-body.jpg (y:320-1316).
+
+  Peek cards are real partial previews of their destination page
+  now (echo treatment), not text-only info cards. Left (GREENS)
+  shows a slice of assets/greens-icons-ghost.png (needs to sit in
+  assets/ here too) plus live "Just Greens" text in Lora, echoing
+  the real greens.2203.fyi flag. Right (KNET) has no photo asset,
+  so its header is recreated in pure CSS -- same diagonal black/
+  blue gradient + kNET wordmark as the real page. Both echo the
+  DESTINATION's own header, not this page's -- earlier draft had
+  this backwards (was showing MTD's own header on the KNET card),
+  corrected per Sven's clarification.
+
+  Nav arrows moved off this page's own flag entirely and now live
+  on the peek cards, positioned at each card's INNER edge (facing
+  center) -- sitting at the margin between this page and whichever
+  one you'd click into.
   ============================================================
 -->
 
@@ -39,6 +63,7 @@
     --rule:      #22262c;
     --mono: 'Courier New', ui-monospace, 'SFMono-Regular', Consolas, monospace;
     --flag-accent: #c9812f;
+    --header-tone: #ede4c5;
   }
 
   * { box-sizing: border-box; }
@@ -80,79 +105,16 @@
   .flag {
     position: relative;
     height: 200px;
-    background: linear-gradient(135deg, #000 49.6%, var(--flag-accent) 50.4%);
+    background-image: url('assets/mtd-header.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
     border: 1px solid var(--rule);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 64px;
+    padding: 0 24px;
     overflow: hidden;
-  }
-
-  .flag::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to bottom, transparent 0%, rgba(79,209,255,0.08) 50%, transparent 100%);
-    background-size: 100% 300%;
-    animation: sweep 6s linear infinite;
-  }
-
-  @keyframes sweep {
-    0%   { background-position: 0 0%; }
-    100% { background-position: 0 300%; }
-  }
-
-  .flag h1 {
-    position: relative;
-    z-index: 2;
-    margin: 0;
-    text-align: center;
-    color: var(--white);
-    font-size: clamp(28px, 8vw, 44px);
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-shadow: 0 0 12px rgba(255,255,255,0.35);
-  }
-
-  .flag-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 2;
-    background: none;
-    border: none;
-    padding: 8px;
-    color: var(--dim);
-    font-family: var(--mono);
-    font-weight: 700;
-    font-size: clamp(18px, 4.5vw, 28px);
-    letter-spacing: 0.05em;
-    text-shadow: 0 0 12px rgba(255,255,255,0.35);
-    cursor: pointer;
-    line-height: 1;
-    text-decoration: none;
-    display: inline-block;
-  }
-  .flag-arrow--prev { left: 2px; }
-  .flag-arrow--next { right: 2px; }
-  .flag-arrow:hover,
-  .flag-arrow:focus-visible {
-    color: var(--glow);
-    text-shadow: 0 0 16px rgba(79,209,255,0.6);
-  }
-
-  .cursor {
-    display: inline-block;
-    width: 0.5em;
-    margin-left: 2px;
-    background: var(--white);
-    animation: blink 1.1s steps(1) infinite;
-  }
-
-  @keyframes blink {
-    0%, 49%   { opacity: 1; }
-    50%, 100% { opacity: 0; }
   }
 
   .prompt {
@@ -168,23 +130,15 @@
     margin: 24px 0;
   }
 
-  /* ---------- center content: poster page ---------- */
-  .poster-frame {
+  /* ---------- center content: poster body fill ---------- */
+  .poster-body {
     margin-top: 24px;
-    border: 1px solid var(--rule);
-    background: var(--panel);
-    padding: 12px;
+    line-height: 0;
   }
-  .poster-frame img {
+  .poster-body img {
     display: block;
     width: 100%;
     height: auto;
-  }
-  .poster-caption {
-    margin: 10px 0 0;
-    font-size: 12px;
-    color: var(--dim);
-    text-align: center;
   }
 
   footer {
@@ -212,7 +166,33 @@
     max-width: 220px;
     display: flex;
     align-items: center;
+    position: relative;
   }
+
+  .peek-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 3;
+    background: none;
+    border: none;
+    padding: 4px;
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: clamp(15px, 3vw, 20px);
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    line-height: 1;
+    text-decoration: none;
+    display: inline-block;
+    color: var(--dim);
+  }
+  .peek-arrow:hover,
+  .peek-arrow:focus-visible {
+    color: var(--glow);
+  }
+  .peek--left .peek-arrow { right: 8px; }
+  .peek--right .peek-arrow { left: 8px; }
 
   .peek-card {
     width: 100%;
@@ -229,6 +209,7 @@
     opacity: 0.6;
     cursor: pointer;
     transition: opacity 0.15s ease;
+    overflow: hidden;
   }
   .peek-card:hover,
   .peek-card:focus-visible {
@@ -250,6 +231,63 @@
     font-size: 12px;
     color: var(--dim);
   }
+
+  /* ---------- echo cards: a genuine partial preview of the destination page ---------- */
+  .peek-card--echo { padding: 0; justify-content: flex-start; }
+  .peek-echo-img { height: 64px; flex-shrink: 0; }
+  .peek-echo-body { flex: 1 1 auto; padding: 14px 12px; display: flex; flex-direction: column; justify-content: flex-end; }
+
+  /* destination: knet -- no photo asset, so we recreate its actual flag gradient + wordmark */
+  .peek-echo-img--knet {
+    background: linear-gradient(135deg, #000 49.6%, #1c3fd9 50.4%);
+    display: flex;
+    align-items: center;
+    padding-left: 14px;
+  }
+  .peek-echo-img--knet span {
+    color: #fff;
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 19px;
+    letter-spacing: 0.08em;
+    text-shadow: 0 0 8px rgba(255,255,255,0.3);
+  }
+  .peek-echo-body--knet { background: #1c3fd9; }
+  .peek-echo-body--knet .peek-eyebrow { color: rgba(255,255,255,0.65); }
+  .peek-echo-body--knet h3 { color: #ffffff; }
+  .peek-echo-body--knet p { color: rgba(255,255,255,0.8); }
+
+  /* destination: just greens -- ghosted icons + live serif wordmark, same as the real page */
+  .peek-echo-img--greens {
+    position: relative;
+    background: #ffffff;
+  }
+  .peek-echo-img--greens img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: left center;
+    opacity: 0.55;
+  }
+  .peek-echo-img--greens span {
+    position: relative;
+    z-index: 1;
+    display: block;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    padding-left: 12px;
+    font-family: 'Lora', Georgia, 'Times New Roman', serif;
+    font-weight: 600;
+    font-size: 16px;
+    color: #201c16;
+  }
+  .peek-echo-body--greens { background: #ffffff; }
+  .peek-echo-body--greens .peek-eyebrow { color: #8a8a8a; }
+  .peek-echo-body--greens h3 { color: #1a1a1a; }
+  .peek-echo-body--greens p { color: #6b7280; }
 
   main.center-frame {
     flex: 1 1 auto;
@@ -298,9 +336,6 @@
     }
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    .flag::after, .cursor { animation: none; }
-  }
 </style>
 </head>
 
@@ -308,29 +343,32 @@
 <div class="page-shell">
 
   <div class="frameset-track">
-      <aside class="peek">
-        <a class="peek-card" href="https://greens.2203.fyi/" style="--peek-accent:#2f9e44">
-          <span class="peek-eyebrow">PREV</span>
-          <h3>JUST GREENS</h3>
-          <p>nonprofit produce, window grow array</p>
+      <aside class="peek peek--left">
+        <a class="peek-arrow" href="https://greens.2203.fyi/" aria-label="Previous: Just Greens" title="Just Greens🌱">[ &rsaquo; ]</a>
+        <a class="peek-card peek-card--echo" href="https://greens.2203.fyi/" style="--peek-accent:#2f9e44">
+          <div class="peek-echo-img peek-echo-img--greens">
+            <img src="assets/greens-icons-ghost.png" alt="">
+            <span>Just Greens</span>
+          </div>
+          <div class="peek-echo-body peek-echo-body--greens">
+            <span class="peek-eyebrow">PREV</span>
+            <h3>JUST GREENS</h3>
+            <p>nonprofit produce, window grow array</p>
+          </div>
         </a>
       </aside>
 
       <main class="center-frame">
 
         <div class="flag">
-          <a class="flag-arrow flag-arrow--prev" href="https://greens.2203.fyi/" aria-label="Previous: Just Greens" title="Just Greens🌱">[ &rsaquo; ]</a>
-          <h1>MTD<span class="cursor">&nbsp;</span></h1>
-          <a class="flag-arrow flag-arrow--next" href="https://86.2203.fyi/" aria-label="Next: kNET" title="kNET📡">[ &lsaquo; ]</a>
         </div>
 
         <p class="prompt"><span>$</span> node --status scaffold // mtd.2203.fyi</p>
 
         <hr>
 
-        <div class="poster-frame">
-          <img src="assets/mesh-the-divide-poster.png" alt="Mesh That Divide poster">
-          <p class="poster-caption">community Meshtastic network -- full page in progress</p>
+        <div class="poster-body">
+          <img src="assets/mtd-body.jpg" alt="Mesh That Divide -- mountains and radio waves over the divide">
         </div>
 
         <footer>
@@ -340,12 +378,16 @@
 
       </main>
 
-      <aside class="peek">
-        <a class="peek-card" href="https://86.2203.fyi/" style="--peek-accent:#1c3fd9">
-          <span class="peek-eyebrow">NEXT</span>
-          <h3>KNET</h3>
-          <p>landing / tools / projects</p>
+      <aside class="peek peek--right">
+        <a class="peek-card peek-card--echo" href="https://86.2203.fyi/" style="--peek-accent:#1c3fd9">
+          <div class="peek-echo-img peek-echo-img--knet"><span>kNET</span></div>
+          <div class="peek-echo-body peek-echo-body--knet">
+            <span class="peek-eyebrow">NEXT</span>
+            <h3>KNET</h3>
+            <p>landing / tools / projects</p>
+          </div>
         </a>
+        <a class="peek-arrow" href="https://86.2203.fyi/" aria-label="Next: kNET" title="kNET📡">[ &lsaquo; ]</a>
       </aside>
   </div>
 
