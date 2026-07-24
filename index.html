@@ -311,15 +311,17 @@
       transform: translateY(-2px) !important;
     }
 
-    /* Side-navs form the top navbar. Reset desktop's top:26% absolute
-       positioning; each nav sits in its own grid cell, self-contained. */
+    /* Side-navs sit in their grid cells as the top navbar.
+       position:relative (not static) so absolutely-positioned
+       panels can escape the cell downward over the poster. */
     .margin-left  .side-nav { grid-area: navL; }
     .margin-right .side-nav { grid-area: navR; }
     .side-nav {
-      position: static !important;
+      position: relative !important;
       top: auto !important;
       left: auto !important;
       right: auto !important;
+      overflow: visible;
     }
 
     /* Accordion buttons compressed for the narrower navbar cell --
@@ -331,35 +333,44 @@
     .side-nav-panel li { font-size: 11.5px; }
 
     /* ----- hover-expand behaviour (mobile only) -----
-       On mobile, hide all toggles and panels by default. On hover
-       over the .side-nav container, reveal the full accordion below
-       the label bar. The panels drop directly over the poster frame
-       via z-index + position:relative on the side-nav cell, and a
-       scrim dims the poster behind them.
-       Touch devices fire :hover on first tap, so this works on both
-       pointer and touch. */
-    .side-nav-toggle,
-    .side-nav-panel { display: none !important; }
+       .side-nav-label is the visible tab (in normal flow, sets cell
+       height). .side-nav-body holds all toggles + panels; it is
+       absolutely positioned below the label so it floats OVER the
+       poster without pushing any content down. */
+    .side-nav { position: relative !important; overflow: visible; }
 
-    .side-nav:hover .side-nav-toggle,
-    .side-nav:focus-within .side-nav-toggle {
-      display: flex !important;
+    .side-nav-body {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      z-index: 20;
+      background: inherit;
     }
-    .side-nav:hover .side-nav-panel,
-    .side-nav:focus-within .side-nav-panel {
-      display: block !important;
+
+    .side-nav:hover .side-nav-body,
+    .side-nav:focus-within .side-nav-body,
+    .side-nav.is-open .side-nav-body {
+      display: block;
     }
-    .side-nav:hover,
-    .side-nav:focus-within {
-      z-index: 10;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-    }
+
+    /* Inside the floating body, all toggles visible by default;
+       individual panels respect the JS-managed hidden attribute. */
+    .side-nav-body .side-nav-toggle { display: flex !important; }
+    .side-nav-body .side-nav-panel[hidden] { display: none !important; }
+    .side-nav-body .side-nav-panel { display: block; }
+
+    /* Side-nav body backgrounds matching each nav's colour scheme */
+    .margin-left .side-nav-body  { background: var(--cream); border: 1px solid var(--orange); border-top: none; }
+    .margin-right .side-nav-body { background: var(--cream); border: 1px solid var(--ink); border-top: none; }
 
     /* Ghost the poster frame when either side-nav is hovered/focused.
        Reduced opacity fades the poster toward the paper background --
        no dark overlay, just the poster washing out. */
     .carousel-row:has(.side-nav:hover) .center-frame,
-    .carousel-row:has(.side-nav:focus-within) .center-frame {
+    .carousel-row:has(.side-nav:focus-within) .center-frame,
+    .carousel-row:has(.side-nav.is-open) .center-frame {
       opacity: 0.25;
       transition: opacity 0.2s ease;
     }
@@ -474,6 +485,10 @@
      at 24.1%), landing right where the radio-wave arcs/mountains
      take over. Top-anchored, not centered like the promo cards --
      "adjacent to the mountains" is a start line, not a midpoint. ---------- */
+  @media (min-width: 1109px) {
+    .side-nav-body { display: contents; } /* desktop: not a separate block */
+  }
+
   .side-nav {
     position: absolute;
     left: 0;
@@ -699,6 +714,7 @@
 
         <nav class="side-nav" aria-label="Users navigation">
           <div class="side-nav-label side-nav-label--users">USERS:</div>
+          <div class="side-nav-body">
           <button type="button" class="side-nav-toggle" data-menu="tunein">TUNE IN <span class="chev">›</span></button>
           <div class="side-nav-panel" id="menu-tunein" hidden>
             <ul>
@@ -716,6 +732,7 @@
               <li class="is-muted"><a href="mailto:ReusernameTaken@2203.fyi">Reach out</a></li>
             </ul>
           </div>
+                  </div>
         </nav>
       </aside>
 
@@ -745,6 +762,7 @@
 
         <nav class="side-nav" aria-label="Dev/Ops navigation">
           <div class="side-nav-label side-nav-label--devs">DEV/OPS:</div>
+          <div class="side-nav-body">
           <button type="button" class="side-nav-toggle" data-menu="build">BUILD <span class="chev">›</span></button>
           <div class="side-nav-panel" id="menu-build" hidden>
             <ul>
@@ -770,6 +788,7 @@
               <li><a href="#" data-content="vail">Vail Corridor</a></li>
             </ul>
           </div>
+                  </div>
         </nav>
       </aside>
   </div>
@@ -861,6 +880,41 @@
     if (!link) return;
     e.preventDefault();
     renderContent(link.dataset.content);
+    // Collapse the menu that was just used
+    var nav = link.closest('.side-nav');
+    if (nav) {
+      nav.classList.remove('is-open');
+      nav.blur();
+    }
+  });
+
+  // ---- label-tap collapse: tapping the USERS: or DEV/OPS: tab
+  // toggles .is-open on the parent nav. First tap = open (adds class
+  // + hover still works for mouse); second tap = collapse (removes
+  // class AND blurs focus so :focus-within also clears).
+  document.querySelectorAll('.side-nav-label').forEach(function (lbl) {
+    lbl.style.cursor = 'pointer';
+    lbl.setAttribute('tabindex', '0');
+    lbl.setAttribute('role', 'button');
+    lbl.addEventListener('click', function () {
+      var nav = lbl.closest('.side-nav');
+      if (!nav) return;
+      var isOpen = nav.classList.contains('is-open');
+      // Close all navs first
+      document.querySelectorAll('.side-nav').forEach(function (n) {
+        n.classList.remove('is-open');
+      });
+      if (!isOpen) {
+        // Was closed — open it
+        nav.classList.add('is-open');
+      } else {
+        // Was open — leave closed, also blur focus
+        nav.blur();
+      }
+    });
+    lbl.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); lbl.click(); }
+    });
   });
 
   // ---- both accordions (USERS: and DEVS:) share one open-panel
