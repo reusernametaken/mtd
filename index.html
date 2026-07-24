@@ -219,7 +219,13 @@
     align-items: stretch;
     gap: 20px;
     width: 100%;
-    max-width: 1120px;
+    /* 214 + 20 + 640 + 20 + 214 = 1108 -- matches greens.2203.fyi
+       and 86.2203.fyi's own carousel column sums exactly. Previous
+       value (1120px) drifted from k-NET/greens' 640px center by
+       40px and left the breakpoint math off by 12; corrected now
+       so the three sites' frames align byte-for-byte when the user
+       clicks between them in the scrubber. */
+    max-width: 1108px;
   }
 
   .margin-left,
@@ -230,31 +236,99 @@
   }
 
   .center-frame {
-    flex: 1 1 680px;
+    /* Center column matched to k-NET's .page-shell (640px) and
+       greens.2203.fyi's main.center-frame (640px). Prior rebuild
+       used 680px, which was the odd one out across the three
+       sibling files -- and made the peek-card X-positions drift
+       when clicking between siblings via the scrubber. */
+    flex: 1 1 640px;
     width: 100%;
-    max-width: 680px;
+    max-width: 640px;
   }
 
-  @media (max-width: 1120px) {
-    .carousel-row { flex-direction: column; align-items: center; }
-    .margin-left, .margin-right {
-      position: static;
+  /* ---------- mobile layout (rev 3, per shared 2203.fyi convention):
+     when the sidebars can no longer flank the poster, the whole
+     .carousel-row becomes a three-row grid --
+       row 1: two side-nav title bars (USERS: orange left | DEV/OPS:
+              ink right), sitting side by side as a banner-oriented
+              navbar. Each nav's own accordion buttons live below its
+              title inside the same grid cell, so when a toggle is
+              tapped its panel drops downward IN PLACE, "into the
+              main-frame column" of the layout. USERS: content stays
+              on the left half; DEV/OPS: content stays on the right
+              half -- respecting each nav's origin column. When a
+              path is picked in a panel the existing click handler
+              swaps #centerContent AND fires a collapseNav() call
+              (added in the script below) that closes the accordion
+              back down to just its title bar.
+       row 2: the poster / main frame (spans both columns).
+       row 3: peek cards -- Just Greens promo left, k-NET promo
+              right -- each filling half the width, side by side,
+              filling the page width to suggest clicking left/right.
+     `display: contents` on the .margin-left/.margin-right asides
+     promotes their children directly into the .carousel-row grid so
+     grid-area assignments can target the promo cards and side-navs
+     separately -- .promo goes to a row-3 cell, .side-nav to a row-1
+     cell.
+     ---------- */
+  @media (max-width: 1108px) {
+    .carousel-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-areas:
+        "navL  navR"
+        "main  main"
+        "peekL peekR";
+      column-gap: 12px;
+      row-gap: 14px;
       width: 100%;
-      max-width: 680px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      align-items: flex-start;
+      max-width: 640px;
+      align-items: start;
     }
-    .margin-left .promo, .margin-left .side-nav,
-    .margin-right .promo, .margin-right .side-nav {
+    .margin-left, .margin-right { display: contents; }
+
+    .center-frame {
+      grid-area: main;
+      flex: initial;
+      width: 100%;
+      max-width: none;
+    }
+
+    /* Peek cards (promo) sit at the bottom of the grid, filling
+       their cells. Reset the desktop's absolute vertical centering. */
+    .margin-left  .promo { grid-area: peekL; }
+    .margin-right .promo { grid-area: peekR; }
+    .promo {
       position: static !important;
       transform: none !important;
-      left: auto; right: auto; top: auto;
+      top: auto !important;
+      left: auto !important;
+      right: auto !important;
+      width: auto;
     }
-    .margin-left { order: 2; }
-    .center-frame { order: 1; width: 100%; max-width: 680px; }
-    .margin-right { order: 3; }
+    .promo:hover,
+    .promo:focus-visible {
+      transform: translateY(-2px) !important;
+    }
+
+    /* Side-navs form the top navbar. Reset desktop's top:26% absolute
+       positioning; each nav sits in its own grid cell, self-contained. */
+    .margin-left  .side-nav { grid-area: navL; }
+    .margin-right .side-nav { grid-area: navR; }
+    .side-nav {
+      position: static !important;
+      top: auto !important;
+      left: auto !important;
+      right: auto !important;
+    }
+
+    /* Accordion buttons compressed for the narrower navbar cell --
+       chevron stays visible; label text sized down slightly so both
+       USERS and DEV/OPS labels fit their columns without wrapping. */
+    .side-nav-label { font-size: 12px; padding: 7px 10px; }
+    .side-nav-toggle { font-size: 11.5px; padding: 8px 10px; }
+    .side-nav-panel ul { padding: 5px 10px 8px 18px; }
+    .side-nav-panel li { font-size: 11.5px; }
   }
 
   /* ---------- promo cards: anchored to half of --knet-banner-h
