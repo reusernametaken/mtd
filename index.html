@@ -809,7 +809,6 @@
               <li><a href="#" data-content="meshcore">What is MeshCore?</a></li>
               <li><a href="#" data-content="who">Who's Building This</a></li>
               <li><a href="#" data-content="faq">FAQ</a></li>
-              <li><a href="#" data-content="blog">Blog</a></li>
             </ul>
           </div>
 
@@ -901,7 +900,7 @@
       </aside>
   </div>
 
-  <nav class="page-strip" id="pageStrip" aria-label="Site pages"></nav>
+  
 
 <script>
 (function () {
@@ -917,21 +916,6 @@
 
   var idx = PAGES.findIndex(function (p) { return p.id === CURRENT_ID; });
   if (idx === -1) idx = 0;
-
-  // ---- scrubber: always [prev, current, next] -- current lands
-  // dead-center by construction, every time, on any of the three
-  // files, since the carousel is round and has no fixed first/last.
-  // It's the only carousel nav now -- prev/next arrows were removed;
-  // scrubber links already cover the same job with less chrome.
-  var strip = document.getElementById('pageStrip');
-  var windowed = [ PAGES[wrap(idx - 1)], PAGES[idx], PAGES[wrap(idx + 1)] ];
-  windowed.forEach(function (p) {
-    var el = document.createElement(p.live ? 'a' : 'span');
-    el.className = 'stop' + (p.id === CURRENT_ID ? ' is-active' : '') + (p.live ? '' : ' is-soon');
-    if (p.live) el.href = p.href;
-    el.textContent = p.name;
-    strip.appendChild(el);
-  });
 
   // ---- center content: capture the poster's own src/alt ONCE at
   // load, before anything swaps -- both showPoster() and the ghosted
@@ -988,13 +972,10 @@
     var link = e.target.closest('a[data-content]');
     if (!link) return;
     e.preventDefault();
+    e.stopPropagation();
     renderContent(link.dataset.content);
-    // Collapse the menu that was just used
-    var nav = link.closest('.side-nav');
-    if (nav) {
-      nav.classList.remove('is-open');
-      nav.blur();
-    }
+    // Collapse whichever panel was open when the path was chosen
+    closeAllPanels(false);
   });
 
   // ---- label-tap collapse: tapping the USERS: or DEV/OPS: tab
@@ -1028,18 +1009,22 @@
 
   // ---- both accordions (USERS: and DEVS:) share one open-panel
   // pool -- opening a section in USERS: closes any open DEVS:
-  // section and vice versa, same single-open-at-a-time rule as
-  // within either one alone. Closing the open section restores the
+  // section and vice versa. Closing the open section restores the
   // poster.
   var toggles = document.querySelectorAll('.side-nav-toggle');
+
+  function closeAllPanels(restorePoster) {
+    toggles.forEach(function (b) { b.classList.remove('is-active'); });
+    document.querySelectorAll('.side-nav-panel').forEach(function (p) { p.hidden = true; });
+    if (restorePoster) showPoster();
+  }
+
   toggles.forEach(function (btn) {
-    btn.addEventListener('click', function () {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
       var panel = document.getElementById('menu-' + btn.dataset.menu);
       var wasOpen = btn.classList.contains('is-active');
-
-      toggles.forEach(function (b) { b.classList.remove('is-active'); });
-      document.querySelectorAll('.side-nav-panel').forEach(function (p) { p.hidden = true; });
-
+      closeAllPanels(false);
       if (!wasOpen && panel) {
         panel.hidden = false;
         btn.classList.add('is-active');
@@ -1048,6 +1033,14 @@
       }
     });
   });
+
+  // Collapse on tap/click anywhere outside the nav panels/toggles
+  document.addEventListener('click', function (e) {
+    var inside = e.target.closest('.side-nav-toggle, .side-nav-panel');
+    if (!inside) closeAllPanels(true);
+  });
+
+
 })();
 </script>
 </body>
