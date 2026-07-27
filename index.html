@@ -249,10 +249,11 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
-    /* "Below the top margin, not the top-right corner" -- starts
-       flush at the column's own top instead of centering on the
-       banner zone like the old single-card version did. */
-    padding-top: 0;
+    /* 56px -- shared right-margin banner-stack offset, same value
+       used on k-NET and Just Greens: clear of the top margin, not
+       flush at 0 like the old single-card version, and not centered
+       on the banner zone either. */
+    padding-top: 56px;
   }
 
   .center-frame {
@@ -323,6 +324,12 @@
       justify-content: center;
       gap: 12px;
       padding-top: 0;
+      /* Desktop's width:214px (a single stacked column) otherwise
+         leaks through here uncorrected -- unlike k-NET/Greens, this
+         rule never reset it, so the wrap row was stuck 214px wide
+         and every card fell onto its own line instead of pairing up
+         two-per-row like the other two sites. */
+      width: 100%;
     }
 
     .center-frame {
@@ -344,10 +351,9 @@
       right: auto !important;
       width: min(214px, calc(50% - 6px));
     }
-    .promo:hover,
-    .promo:focus-visible {
-      transform: translateY(-2px) !important;
-    }
+    /* No hover-lift on mobile -- taps don't hover anyway, and the
+       lift was removed site-wide (see the desktop .promo:hover rule)
+       so there's nothing here to override now. */
 
     /* Side-navs sit in their grid cells as the top navbar.
        position:relative (not static) so absolutely-positioned
@@ -428,6 +434,13 @@
      translateY(-50%) so the card's own middle, not its top edge,
      lands on that line. ---------- */
   .promo {
+    /* position:relative -- NOT just omitted -- is required here even
+       though .promo no longer self-positions: .promo-label uses
+       position:absolute; inset:0 expecting THIS element to be its
+       containing block. Without it, the label escapes to the next
+       positioned ancestor up (the whole margin column), and ends up
+       centered in the stack instead of on its own card. */
+    position: relative;
     display: block;
     line-height: 0;
     text-decoration: none;
@@ -439,7 +452,6 @@
   .promo:focus-visible {
     border-color: var(--orange);
     box-shadow: 0 4px 16px rgba(236, 142, 67, 0.5);
-    transform: translateY(-2px);
   }
 
   /* Sponsor/bill banner placeholders -- Middle Park Meat Co. and
@@ -465,7 +477,6 @@
   .banner-placeholder:focus-visible {
     border-color: var(--orange);
     background: rgba(236,142,67,0.08);
-    transform: translateY(-2px);
   }
   .placeholder-label {
     color: var(--ink);
@@ -873,10 +884,15 @@
           <span class="promo-label">Just Greens</span>
         </a>
 
-        <a class="banner-placeholder mpmc-banner" href="#" aria-label="Middle Park Meat Co. -- banner coming soon" tabindex="-1">
-          <span class="placeholder-label">Middle Park<br>Meat Co.</span>
-          <span class="placeholder-tag">banner coming soon</span>
-        </a>
+        <a class="banner-placeholder reserved-banner" href="#" aria-label="Reserved banner slot" tabindex="-1">
+  <span class="placeholder-label">Reserved</span>
+  <span class="placeholder-tag">banner slot open</span>
+</a>
+
+<a class="banner-placeholder reserved-banner" href="#" aria-label="Reserved banner slot" tabindex="-1">
+  <span class="placeholder-label">Reserved</span>
+  <span class="placeholder-tag">banner slot open</span>
+</a>
 
         <a class="banner-placeholder s2203-banner" href="https://s.2203.fyi/" title="s.2203.fyi" aria-label="S.2203 -- Break the Cycle of Violence Act">
           <span class="placeholder-label">S.2203</span>
@@ -892,6 +908,7 @@
   var PAGES = [
     { id: 'mesh',   name: 'meshTHATdivide', href: 'https://mtd.2203.fyi/', theme: '#c9812f', live: true },
     { id: 'knet',   name: 'k-NET',          href: 'https://86.2203.fyi/', theme: '#1c3fd9', live: true },
+    { id: 's2203',  name: 'S.2203',         href: 'https://s.2203.fyi/', theme: '#8b2942', live: true },
     { id: 'greens', name: 'Just Greens',    href: 'https://greens.2203.fyi/', theme: '#2f9e44', live: true }
   ];
   var CURRENT_ID = 'mesh';
