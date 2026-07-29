@@ -150,7 +150,7 @@
 <style>
   :root {
     --cream:  #EFE2C3;
-    --ink:    #26383E;
+    --ink:    #16211F;
     --orange: #EC8E43;
     --paper:  #FFFFFF;
     --kraft:  #8A6A44;
@@ -719,7 +719,7 @@
   }
   .stub-copy h2 {
     margin: 0 0 10px;
-    font-size: 17px;
+    font-size: 18px;
     font-weight: 700;
     color: var(--ink);
     letter-spacing: 0.03em;
@@ -727,14 +727,14 @@
   .stub-copy h2::before { content: "> "; color: var(--orange); }
   .stub-copy h3 {
     margin: 20px 0 6px;
-    font-size: 13.5px;
+    font-size: 14.5px;
     font-weight: 700;
     letter-spacing: 0.06em;
     color: var(--ink);
   }
   .stub-copy p {
     margin: 0 0 12px;
-    font-size: 14.5px;
+    font-size: 15.5px;
     line-height: 1.5;
     color: var(--ink);
     max-width: 58ch;
@@ -745,7 +745,7 @@
     max-width: 58ch;
   }
   .stub-copy li {
-    font-size: 14px;
+    font-size: 15px;
     line-height: 1.5;
     margin: 4px 0;
   }
@@ -884,7 +884,7 @@
           <span class="promo-label">Just Greens</span>
         </a>
 
-        <a class="promo" href="https://coloradomesh.org/" title="coloradomesh.org" aria-label="ColoradoMesh -- visit site" style="background:#0b0d10">
+        <a class="promo" href="https://coloradomesh.org/" target="_blank" rel="noopener" title="coloradomesh.org" aria-label="ColoradoMesh -- visit site" style="background:#0b0d10">
           <svg viewBox="0 0 214 74" width="214" height="74" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ColoradoMesh.org">
             <rect width="214" height="74" fill="#0b0d10"/>
             <g stroke="#4fd1ff" stroke-width="1.4" opacity="0.9">
@@ -909,7 +909,7 @@
   <span class="placeholder-tag">banner slot open</span>
 </a>
 
-        <a class="promo" href="https://s.2203.fyi/" title="s.2203.fyi" aria-label="S.2203 -- Break the Cycle of Violence Act" style="background:#0d1526">
+        <a class="promo" href="https://www.congress.gov/bill/119th-congress/senate-bill/2203" target="_blank" rel="noopener" title="congress.gov -- S.2203" aria-label="S.2203 -- Break the Cycle of Violence Act, view bill on congress.gov" style="background:#0d1526">
           <svg viewBox="0 0 214 74" width="214" height="74" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="S.2203 Act banner">
             <rect width="214" height="74" fill="#0d1526"/>
             <g fill="#d4c9a8">
@@ -1046,7 +1046,8 @@
   function closeAllPanels(restorePoster) {
     toggles.forEach(function (b) { b.classList.remove('is-active'); });
     document.querySelectorAll('.side-nav-panel').forEach(function (p) { p.hidden = true; });
-    document.querySelectorAll('.side-nav').forEach(function (n) { n.classList.remove('is-open'); n.blur(); });
+    document.querySelectorAll('.side-nav').forEach(function (n) { n.classList.remove('is-open'); });
+    if (document.activeElement) document.activeElement.blur();
     if (restorePoster) showPoster();
   }
 
