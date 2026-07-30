@@ -150,7 +150,7 @@
 <style>
   :root {
     --cream:  #EFE2C3;
-    --ink:    #16211F;
+    --ink:    #0C1413;
     --orange: #EC8E43;
     --paper:  #FFFFFF;
     --kraft:  #8A6A44;
@@ -1066,7 +1066,7 @@
 
   // Collapse on tap/click anywhere outside the nav panels/toggles
   document.addEventListener('click', function (e) {
-    var inside = e.target.closest('.side-nav-toggle, .side-nav-panel');
+    var inside = e.target.closest('.side-nav-toggle, .side-nav-panel, .side-nav-label');
     if (!inside) closeAllPanels(true);
   });
 
