@@ -610,7 +610,9 @@
     cursor: pointer;
     text-align: left;
   }
-  .side-nav-toggle:hover,
+  @media (hover: hover) {
+    .side-nav-toggle:hover { background: var(--ink); color: var(--cream); }
+  }
   .side-nav-toggle:focus-visible {
     background: var(--ink);
     color: var(--cream);
