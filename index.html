@@ -1003,9 +1003,12 @@
     if (!link) return;
     e.preventDefault();
     e.stopPropagation();
-    renderContent(link.dataset.content);
-    // Collapse whichever panel was open when the path was chosen
-    closeAllPanels(false);
+    // Collapse any open accordion panel, EXCEPT the one that contains
+    // the link we just clicked, if any. A closest('.side-nav-panel')
+    // here would wrongly close the panel we're already inside.
+    document.querySelectorAll('.side-nav-toggle').forEach(function (b) { if (b !== link.parentElement) b.classList.remove('is-active'); });
+    document.querySelectorAll('.side-nav-panel').forEach(function (p) { if (p !== link.parentElement) p.hidden = true; });
+    document.querySelectorAll('.side-nav').forEach(function (n) { n.classList.remove('is-open'); });
   });
 
   // ---- label-tap collapse: tapping the USERS: or DEV/OPS: tab
