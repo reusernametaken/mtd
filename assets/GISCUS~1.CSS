@@ -1,0 +1,43 @@
+/* giscus custom theme — matched to mtd.2203.fyi's palette
+   (:root vars from index.html: --cream #EFE2C3, --ink #0C1413,
+   --orange #EC8E43, --paper #FFFFFF, --kraft #8A6A44)
+
+   Upload to: assets/giscus-theme.css
+   Reference in the embed as:
+   data-theme="https://mtd.2203.fyi/assets/giscus-theme.css"
+
+   Caveat: giscus's custom-theme mechanism only exposes COLOR
+   variables — it can't be pointed at the site's monospace font
+   stack, so the widget will still render in GitHub's system font
+   inside its iframe, not Courier New. Colors will match; typography
+   won't. Flagging that now rather than after it's live so it's not
+   read as a mistake.
+*/
+
+:root {
+  color-scheme: light;
+
+  --color-canvas-default: #EFE2C3;   /* cream — main widget bg */
+  --color-canvas-subtle: #FFFFFF;    /* paper — comment box / header bg */
+  --color-canvas-inset: #FFFFFF;
+
+  --color-border-default: #8A6A44;   /* kraft — card borders */
+  --color-border-muted: rgba(12, 20, 19, 0.15);
+
+  --color-fg-default: #0C1413;       /* ink — primary text */
+  --color-fg-muted: #8A6A44;         /* kraft — timestamps, meta */
+  --color-fg-subtle: rgba(12, 20, 19, 0.55);
+
+  --color-accent-fg: #EC8E43;        /* orange — links */
+  --color-accent-emphasis: #EC8E43;  /* orange — primary buttons */
+
+  --color-neutral-muted: rgba(138, 106, 68, 0.15); /* kraft, hover/active */
+
+  --color-btn-text: #FFFFFF;
+  --color-btn-bg: #EC8E43;
+  --color-btn-border: #EC8E43;
+  --color-btn-hover-bg: #d67c34;
+  --color-btn-hover-border: #d67c34;
+
+  --color-danger-fg: #b3432b;
+}
