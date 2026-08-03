@@ -982,7 +982,18 @@
         if (!res.ok) throw new Error('HTTP ' + res.status);
         return res.text();
       })
-      .then(function (html) { target.innerHTML = html; })
+      .then(function (html) {
+        target.innerHTML = html;
+        var scripts = target.querySelectorAll('script');
+        scripts.forEach(function (oldScript) {
+          var newScript = document.createElement('script');
+          for (var i = 0; i < oldScript.attributes.length; i++) {
+            newScript.setAttribute(oldScript.attributes[i].name, oldScript.attributes[i].value);
+          }
+          newScript.textContent = oldScript.textContent;
+          oldScript.parentNode.replaceChild(newScript, oldScript);
+        });
+      })
       .catch(function () {
         target.innerHTML =
           '<h2>Not Yet Uploaded</h2><p class="stub-error">' +
