@@ -159,6 +159,7 @@ body {
   z-index: 1;
   overflow-y: auto;
   padding: 36.78% 9% 8%;
+  color: #3a5052;
 }
 .page-copy h1,
 .page-copy h2 {
@@ -462,3 +463,11 @@ body {
 .placeholder-label { color: var(--ink); font-size: 14px; font-weight: 700; line-height: 1.25; }
 .placeholder-tag { color: var(--ink); opacity: 0.55; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; }
 @media (max-width: 760px) { .banner-placeholder { width: min(214px, calc(50% - 6px)); } }
+
+.map-slot {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+  aspect-ratio: 4 / 3; margin: 0 0 12px; max-width: 58ch;
+  border: 2px dashed #3a5052; background: rgba(58,80,82,0.05);
+  font-weight: 700; font-size: 14px; text-align: center;
+}
+.map-slot-sub { font-weight: 400; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.6; }
