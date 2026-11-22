@@ -446,3 +446,19 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .greens-photo { animation: none; }
 }
+
+/* ---------- placeholder banner slot (right margin) ---------- */
+.banner-placeholder {
+  box-sizing: border-box;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 4px; padding: 14px 10px; min-height: 64px;
+  border: 2px dashed var(--ink);
+  background: rgba(63,93,104,0.05);
+  text-decoration: none; text-align: center;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.banner-placeholder:hover,
+.banner-placeholder:focus-visible { border-color: var(--orange); background: rgba(236,142,67,0.08); }
+.placeholder-label { color: var(--ink); font-size: 14px; font-weight: 700; line-height: 1.25; }
+.placeholder-tag { color: var(--ink); opacity: 0.55; font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; }
+@media (max-width: 760px) { .banner-placeholder { width: min(214px, calc(50% - 6px)); } }
