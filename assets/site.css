@@ -559,3 +559,18 @@ body {
 .embed--map.is-live .embed-tap { display: none; }
 .embed-fig { margin: 0; }
 .embed-fig figcaption { font-size: 12.5px; line-height: 1.4; margin: 0 0 8px; }
+
+/* ---------- analyzer link card (home) ---------- */
+.embed-card {
+  display: block;
+  margin: 16px 0 8px;
+  border: 2px solid var(--ink);
+  background: #0b0d10;
+  color: #e8e8e8;
+  text-decoration: none;
+}
+.embed-card svg { display: block; width: 100%; height: auto; }
+.embed-card-text { display: block; padding: 10px 12px 12px; border-top: 1px solid #1d2a30; }
+.embed-card-text strong { display: block; font-size: 14px; letter-spacing: 0.06em; color: #4fd1ff; margin-bottom: 4px; }
+.embed-card-text span { font-size: 12.5px; line-height: 1.4; }
+.embed-card:hover .embed-card-text, .embed-card:focus-visible .embed-card-text { background: #101c22; }

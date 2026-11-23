@@ -12,7 +12,7 @@
 <meta property="og:url" content="https://mtd.2203.fyi/">
 <meta property="og:image" content="https://mtd.2203.fyi/assets/poster.jpg">
 <script>document.documentElement.classList.add('js')</script>
-<link rel="stylesheet" href="/assets/site.css?v=20261123c">
+<link rel="stylesheet" href="/assets/site.css?v=20261123d">
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -98,18 +98,31 @@
     <a class="cta" href="/map/"><strong>See the map</strong><span>Where the chain is headed.</span></a>
     <a class="cta" href="/host/"><strong>Host a repeater</strong><span>A rooftop, a ranch, a place of business.</span></a>
   </div>
-  <figure class="embed-fig">
-    <div class="embed embed--thumb">
-      <iframe src="https://analyzer.meshcore.coloradomesh.org/#/live" title="Live ColoradoMesh packet map" loading="lazy" tabindex="-1" referrerpolicy="no-referrer"></iframe>
-      <a class="embed-link" href="https://analyzer.meshcore.coloradomesh.org/#/live" target="_blank" rel="noopener" aria-label="Open the live ColoradoMesh map in a new tab"></a>
-    </div>
-    <figcaption>The live ColoradoMesh map: packets moving across the network right now. Tap to open it.</figcaption>
-  </figure>
+  <a class="embed-card" href="https://analyzer.meshcore.coloradomesh.org/#/live" target="_blank" rel="noopener" aria-label="Open the live ColoradoMesh map in a new tab">
+    <svg viewBox="0 0 320 150" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <rect width="320" height="150" fill="#0b0d10"/>
+      <g stroke="#4fd1ff" stroke-width="1.2" opacity="0.55" fill="none">
+        <path d="M30 110 L80 60 L140 95 L190 40 L250 80 L290 30"/>
+        <path d="M140 95 L220 125 L250 80"/>
+        <path d="M80 60 L190 40"/>
+      </g>
+      <g fill="#4fd1ff">
+        <circle cx="30" cy="110" r="3.5"/><circle cx="80" cy="60" r="3.5"/><circle cx="140" cy="95" r="3.5"/>
+        <circle cx="190" cy="40" r="3.5"/><circle cx="250" cy="80" r="3.5"/><circle cx="290" cy="30" r="3.5"/><circle cx="220" cy="125" r="3.5"/>
+      </g>
+      <g fill="#fff">
+        <circle r="2.6"><animateMotion dur="5s" repeatCount="indefinite" path="M30,110 L80,60 L140,95 L190,40 L250,80 L290,30"/></circle>
+        <circle r="2.6"><animateMotion dur="3s" begin="1s" repeatCount="indefinite" path="M140,95 L220,125 L250,80"/></circle>
+        <circle r="2.6"><animateMotion dur="2.5s" begin="0.5s" repeatCount="indefinite" path="M80,60 L190,40"/></circle>
+      </g>
+    </svg>
+    <span class="embed-card-text"><strong>The live ColoradoMesh map</strong><span>Watch packets move across the network. Opens the analyzer in a new tab.</span></span>
+  </a>
 </section>
 <footer class="site-foot">
   <span><a href="mailto:mTd@2203.fyi">mTd@2203.fyi</a></span>
 </footer>
 <script src="/assets/nav.js?v=20261123b" defer></script>
-<script src="/assets/embed.js?v=20261123c" defer></script>
+<script src="/assets/embed.js?v=20261123d" defer></script>
 </body>
 </html>

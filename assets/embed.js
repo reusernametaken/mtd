@@ -10,3 +10,8 @@
     b.addEventListener('click', function () { b.parentNode.classList.add('is-live'); });
   });
 })();
+(function () {
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    [].forEach.call(document.querySelectorAll('.embed-card svg'), function (s) { if (s.pauseAnimations) s.pauseAnimations(); });
+  }
+})();
