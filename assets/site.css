@@ -502,3 +502,28 @@ body {
   .js .side-nav.is-open .nav-list { display: block; }
   .js .nav-list a { padding: 11px 10px; }
 }
+
+/* ---------- narrow screens: one column in reading order ----------
+   menu tabs, poster, page content (home: "Join the mesh"), banners last, footer. */
+@media (max-width: 1108px) {
+  body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "navL  navR"
+      "main  main"
+      "below below"
+      "peek  peek"
+      "foot  foot";
+    column-gap: 12px;
+    row-gap: 14px;
+    align-content: start;
+    align-items: start;
+    width: 100%;
+    max-width: 672px;
+    margin: 0 auto;
+  }
+  .carousel-row { display: contents; }
+  .below { grid-area: below; }
+  .site-foot { grid-area: foot; width: 100%; max-width: none; }
+}
