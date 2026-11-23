@@ -475,3 +475,30 @@ body {
 .map-fig { margin: 0 0 12px; }
 .map-fig img { display:block; width:100%; height:auto; border:2px solid #3a5052; }
 .map-fig figcaption { font-size: 12px; opacity: .7; margin-top: 4px; }
+
+/* ---------- narrow screens, script on: menus become dropdown tabs ---------- */
+@media (max-width: 1108px) {
+  .js .side-nav { position: relative; z-index: 50; }
+  .js .side-nav-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 0;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .js .side-nav-label::after { content: "\25BE"; font-size: 14px; }
+  .js .side-nav .nav-list {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: -2px;
+    right: -2px;
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28);
+  }
+  .js .side-nav.is-open .nav-list { display: block; }
+  .js .nav-list a { padding: 11px 10px; }
+}
